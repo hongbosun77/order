@@ -9,23 +9,28 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
-	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName"
-            value="com.mysql.jdbc.Driver" />
-        <property name="url"
-            value="jdbc:mysql://10.75.152.17:3306/order?" />
-        <property name="username" value="root" />
-        <property name="password" value="r00t" />
+	<bean name="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName"
+			value="com.mysql.jdbc.Driver" />
+		<property name="url"
+			value="jdbc:mysql://10.75.152.17:3306/order?autoReconnect=true&amp;useSSL=false&amp;allowPublicKeyRetrieval=true&amp;" />
+		<property name="username" value="root" />
+		<property name="password" value="r00t" />
+		<property name="initialSize" value="2" />
+		<property name="maxActive" value="5" />
 	</bean>
 
-	<!-- 数据会话工厂：映射模型包-->
-	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	<!-- 数据会话工厂：映射模型包 -->
+	<bean id="sqlSessionFactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<property name="typeAliasesPackage" value="com.lesson.model"/>
+		<property name="typeAliasesPackage" value="com.lesson.model" />
 	</bean>
 
 	<!-- 数据会话控制 -->
-	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+	<bean id="sqlSession"
+		class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg index="0" ref="sqlSessionFactory" />
 	</bean>
 
@@ -35,8 +40,10 @@
 	</bean>
 
 	<!-- 数据源事物管理器 -->
-	<tx:annotation-driven transaction-manager="transactionManager" />
-	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	<tx:annotation-driven
+		transaction-manager="transactionManager" />
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 </beans>
